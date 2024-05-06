@@ -1,30 +1,15 @@
 import sys
 from SpiffWorkflow.bpmn.workflow import BpmnWorkflow
 from SpiffWorkflow.spiff.parser import SpiffBpmnParser
-from SpiffWorkflow.bpmn.script_engine import TaskDataEnvironment
-
-from business_logic import add_and_commit_changes
-
-
-class ServiceTaskEnvironment(TaskDataEnvironment):
-    def evaluate(self, expression, context, external_context=None):
-        self.globals.update({"value": context})
-        return context
-
-    def call_service(self, operation_name, operation_params, task_data):
-        if operation_name == "process_add_and_commit_changes":
-            try:
-                return add_and_commit_changes(self.globals["files"])
-            except(Exception):
-                print("something went wrong")
-        else:
-            raise ValueError('Unknown Service')
+from service_environment import ServiceTaskEnvironment
+from SpiffWorkflow.camunda.parser import CamundaParser
 
 def main(files: str):
     parser = SpiffBpmnParser()
-    parser.add_bpmn_file('ife_personal_project.bpmn')
-    spec = parser.get_spec('Process_ife_personal_project_z157wwm')
+    parser.add_bpmn_file('github_update_workflow.bpmn')
+    spec = parser.get_spec('process_ife_personal_project')
     global_var = {"files": files}
+    print(global_var)
     script_env = ServiceTaskEnvironment(global_var)
     workflow = BpmnWorkflow(spec, script_engine=script_env)
     workflow.run_all()
@@ -33,6 +18,6 @@ def main(files: str):
 
 if __name__ == '__main__':
     system_args = sys.argv
-    files = " ".join(system_args[0:])
+    files = " ".join(system_args[1:])
     main(files)
 
