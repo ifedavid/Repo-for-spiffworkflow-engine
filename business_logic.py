@@ -15,7 +15,7 @@ def add_and_commit_changes(global_var: dict[str, str]):
 
 
 def update_branch(files: str):
-    branch = subprocess.run("git branch")
+    branch = subprocess.run("git branch --show-current")
     print(branch.stdout)
     return json.dumps(True)
 
