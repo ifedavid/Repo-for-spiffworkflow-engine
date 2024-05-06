@@ -34,7 +34,9 @@ def main(files: str):
 
 
 if __name__ == '__main__':
+    print("HERERE")
     system_args = sys.argv
+    print(system_args)
     files = " ".join(system_args[0:])
     main(files)
 
