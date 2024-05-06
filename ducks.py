@@ -16,7 +16,7 @@ class ServiceTaskEnvironment(TaskDataEnvironment):
         print(self.globals)
         if operation_name == "process_add_and_commit_changes":
             try:
-                add_and_commit_changes(self.globals["files"])
+                return add_and_commit_changes(self.globals["files"])
             except(Exception):
                 print("something went wrong")
         else:
