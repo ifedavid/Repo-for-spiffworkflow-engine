@@ -12,8 +12,6 @@ class ServiceTaskEnvironment(TaskDataEnvironment):
         return context
 
     def call_service(self, operation_name, operation_params, task_data):
-        print("here")
-        print(self.globals)
         if operation_name == "process_add_and_commit_changes":
             try:
                 return add_and_commit_changes(self.globals["files"])
@@ -34,9 +32,7 @@ def main(files: str):
 
 
 if __name__ == '__main__':
-    print("HERERE")
     system_args = sys.argv
-    print(system_args)
     files = " ".join(system_args[0:])
     main(files)
 
