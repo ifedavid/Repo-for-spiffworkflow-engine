@@ -15,6 +15,8 @@ def add_and_commit_changes(global_var: dict[str, str]):
 
 
 def update_branch(files: str):
+    branch = subprocess.run("git branch")
+    print(branch)
     return json.dumps(True)
 
 def push_updates(files: str):
