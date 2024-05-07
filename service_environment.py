@@ -1,6 +1,14 @@
 from SpiffWorkflow.bpmn.script_engine import TaskDataEnvironment
-from business_logic import add_and_commit_changes, update_branch, push_updates, create_gist, create_issue, create_pr
+from business_logic import (
+    add_and_commit_changes,
+    update_branch,
+    push_updates,
+    create_gist,
+    create_issue,
+    create_pr,
+)
 from enum import StrEnum
+import json
 
 
 class Process(StrEnum):
@@ -24,9 +32,13 @@ class ServiceTaskEnvironment(TaskDataEnvironment):
             Process.PUSH_UPDATES: push_updates,
             Process.CREATE_PR: create_pr,
             Process.CREATE_GIST: create_gist,
-            Process.CREATE_ISSUE: create_issue
+            Process.CREATE_ISSUE: create_issue,
         }
         try:
-            return process_function_map[operation_name](self.globals)
-        except(Exception):
-            print("something went wrong")
+            print(operation_name)
+            results = process_function_map[operation_name](self.globals)
+            self.globals.update(json.loads(results))
+
+            return results
+        except Exception as e:
+            print("something went wrong", e)
