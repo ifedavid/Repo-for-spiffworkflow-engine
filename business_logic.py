@@ -3,6 +3,8 @@ import json
 import requests
 
 BASE_GITHUB_URL = "https://api.github.com"
+GITHUB_TOKEN = "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"
+
 
 def add_and_commit_changes(global_var: dict[str, str]):
     files = global_var["files"]
