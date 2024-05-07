@@ -4,11 +4,10 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_05rl1ci</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_05rl1ci" sourceRef="StartEvent_1" targetRef="process_add_and_commit_changes" />
+    <bpmn:sequenceFlow id="Flow_05rl1ci" sourceRef="StartEvent_1" targetRef="process_update_branch" />
     <bpmn:endEvent id="Event_0ltnego">
       <bpmn:incoming>Flow_1vphuys</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_148savh" sourceRef="process_add_and_commit_changes" targetRef="process_update_branch" />
     <bpmn:serviceTask id="process_add_and_commit_changes" name="Add and commit changes">
       <bpmn:extensionElements>
         <spiffworkflow:serviceTaskOperator id="process_add_and_commit_changes">
@@ -18,20 +17,10 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_05rl1ci</bpmn:incoming>
-      <bpmn:outgoing>Flow_148savh</bpmn:outgoing>
+      <bpmn:incoming>Flow_0mjrquv</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sim6z7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1xbnmcv" sourceRef="process_update_branch" targetRef="process_push_updates" />
-    <bpmn:sequenceFlow id="Flow_0mc1qqz" sourceRef="process_push_updates" targetRef="Gateway_0lg0f3l" />
-    <bpmn:sequenceFlow id="Flow_1nfgsbf" sourceRef="Gateway_0lg0f3l" targetRef="process_create_gist" />
     <bpmn:sequenceFlow id="Flow_1vphuys" sourceRef="process_create_issue" targetRef="Event_0ltnego" />
-    <bpmn:sequenceFlow id="Flow_07b39xz" sourceRef="Gateway_0lg0f3l" targetRef="process_create_PR" />
-    <bpmn:parallelGateway id="Gateway_0lg0f3l" name="Gateway_for_creation">
-      <bpmn:incoming>Flow_0mc1qqz</bpmn:incoming>
-      <bpmn:outgoing>Flow_1nfgsbf</bpmn:outgoing>
-      <bpmn:outgoing>Flow_07b39xz</bpmn:outgoing>
-      <bpmn:outgoing>Flow_19p955n</bpmn:outgoing>
-    </bpmn:parallelGateway>
     <bpmn:serviceTask id="process_update_branch" name="Update_branch">
       <bpmn:extensionElements>
         <spiffworkflow:serviceTaskOperator id="process_update_branch">
@@ -41,8 +30,8 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_148savh</bpmn:incoming>
-      <bpmn:outgoing>Flow_1xbnmcv</bpmn:outgoing>
+      <bpmn:incoming>Flow_05rl1ci</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mjrquv</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="process_push_updates" name="Push updates">
       <bpmn:extensionElements>
@@ -53,8 +42,8 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1xbnmcv</bpmn:incoming>
-      <bpmn:outgoing>Flow_0mc1qqz</bpmn:outgoing>
+      <bpmn:incoming>Flow_1sim6z7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0u85i52</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="process_create_PR" name="Create github PR">
       <bpmn:extensionElements>
@@ -65,7 +54,8 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_07b39xz</bpmn:incoming>
+      <bpmn:incoming>Flow_0u85i52</bpmn:incoming>
+      <bpmn:outgoing>Flow_0q7d8h6</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="process_create_gist" name="Create github gist">
       <bpmn:extensionElements>
@@ -77,7 +67,6 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1nfgsbf</bpmn:incoming>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="process_create_issue" name="Create github Issue">
       <bpmn:extensionElements>
@@ -88,96 +77,68 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0onv7mg</bpmn:incoming>
+      <bpmn:incoming>Flow_0q7d8h6</bpmn:incoming>
       <bpmn:outgoing>Flow_1vphuys</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0onv7mg" sourceRef="Gateway_0zrnhdt" targetRef="process_create_issue" />
-    <bpmn:sequenceFlow id="Flow_19p955n" sourceRef="Gateway_0lg0f3l" targetRef="Gateway_0zrnhdt" />
-    <bpmn:parallelGateway id="Gateway_0zrnhdt" name="Gateway for issue creation">
-      <bpmn:incoming>Flow_19p955n</bpmn:incoming>
-      <bpmn:outgoing>Flow_0onv7mg</bpmn:outgoing>
-    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_1sim6z7" sourceRef="process_add_and_commit_changes" targetRef="process_push_updates" />
+    <bpmn:sequenceFlow id="Flow_0mjrquv" sourceRef="process_update_branch" targetRef="process_add_and_commit_changes" />
+    <bpmn:sequenceFlow id="Flow_0u85i52" sourceRef="process_push_updates" targetRef="process_create_PR" />
+    <bpmn:sequenceFlow id="Flow_0q7d8h6" sourceRef="process_create_PR" targetRef="process_create_issue" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process_ife_personal_project">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="179" y="159" width="36" height="36" />
+        <dc:Bounds x="102" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0ltnego_di" bpmnElement="Event_0ltnego">
         <dc:Bounds x="1242" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1bqrqmj_di" bpmnElement="process_add_and_commit_changes">
-        <dc:Bounds x="290" y="137" width="100" height="80" />
+        <dc:Bounds x="380" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1fc7lu4_di" bpmnElement="Gateway_0lg0f3l">
-        <dc:Bounds x="775" y="152" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="762" y="209" width="84" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_164hqqo_di" bpmnElement="process_update_branch">
-        <dc:Bounds x="450" y="137" width="100" height="80" />
+        <dc:Bounds x="210" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0k9cudh_di" bpmnElement="process_push_updates">
-        <dc:Bounds x="620" y="137" width="100" height="80" />
+        <dc:Bounds x="550" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1gdr3ec_di" bpmnElement="process_create_PR">
-        <dc:Bounds x="880" y="10" width="100" height="80" />
+        <dc:Bounds x="720" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0sjofxv_di" bpmnElement="process_create_gist">
-        <dc:Bounds x="880" y="270" width="100" height="80" />
+        <dc:Bounds x="880" y="300" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_19kmgku_di" bpmnElement="process_create_issue">
-        <dc:Bounds x="1030" y="137" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0gvrv2w_di" bpmnElement="Gateway_0zrnhdt">
-        <dc:Bounds x="915" y="152" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="897" y="209" width="89" height="27" />
-        </bpmndi:BPMNLabel>
+        <dc:Bounds x="880" y="137" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_05rl1ci_di" bpmnElement="Flow_05rl1ci">
-        <di:waypoint x="215" y="177" />
-        <di:waypoint x="290" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_148savh_di" bpmnElement="Flow_148savh">
-        <di:waypoint x="390" y="177" />
-        <di:waypoint x="450" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1xbnmcv_di" bpmnElement="Flow_1xbnmcv">
-        <di:waypoint x="550" y="177" />
-        <di:waypoint x="620" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0mc1qqz_di" bpmnElement="Flow_0mc1qqz">
-        <di:waypoint x="720" y="177" />
-        <di:waypoint x="775" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1nfgsbf_di" bpmnElement="Flow_1nfgsbf">
-        <di:waypoint x="800" y="202" />
-        <di:waypoint x="800" y="310" />
-        <di:waypoint x="880" y="310" />
+        <di:waypoint x="138" y="177" />
+        <di:waypoint x="210" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1vphuys_di" bpmnElement="Flow_1vphuys">
-        <di:waypoint x="1130" y="177" />
+        <di:waypoint x="980" y="177" />
         <di:waypoint x="1242" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_07b39xz_di" bpmnElement="Flow_07b39xz">
-        <di:waypoint x="800" y="152" />
-        <di:waypoint x="800" y="50" />
-        <di:waypoint x="880" y="50" />
+      <bpmndi:BPMNEdge id="Flow_1sim6z7_di" bpmnElement="Flow_1sim6z7">
+        <di:waypoint x="480" y="177" />
+        <di:waypoint x="550" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0onv7mg_di" bpmnElement="Flow_0onv7mg">
-        <di:waypoint x="965" y="177" />
-        <di:waypoint x="1030" y="177" />
+      <bpmndi:BPMNEdge id="Flow_0mjrquv_di" bpmnElement="Flow_0mjrquv">
+        <di:waypoint x="310" y="177" />
+        <di:waypoint x="380" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19p955n_di" bpmnElement="Flow_19p955n">
-        <di:waypoint x="825" y="177" />
-        <di:waypoint x="915" y="177" />
+      <bpmndi:BPMNEdge id="Flow_0u85i52_di" bpmnElement="Flow_0u85i52">
+        <di:waypoint x="650" y="177" />
+        <di:waypoint x="720" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0q7d8h6_di" bpmnElement="Flow_0q7d8h6">
+        <di:waypoint x="820" y="177" />
+        <di:waypoint x="880" y="177" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
